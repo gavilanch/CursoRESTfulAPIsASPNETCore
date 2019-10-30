@@ -31,7 +31,7 @@ namespace WebApiModulo4.Controllers
         [ServiceFilter(typeof(MiFiltroDeAccion))]
         public ActionResult<IEnumerable<Autor>> Get()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
             claseB.HacerAlgo();
             return context.Autores.ToList();
         }

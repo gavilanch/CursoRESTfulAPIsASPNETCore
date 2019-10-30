@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -12,12 +12,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using WebApiModulo4.Contexts;
-using WebApiModulo4.Controllers;
-using WebApiModulo4.Helpers;
-using WebApiModulo4.Services;
+using WebApiModulo5.Contexts;
+using WebApiModulo5.Entities;
+using WebApiModulo5.Models;
 
-namespace WebApiModulo4
+namespace WebApiModulo5
 {
     public class Startup
     {
@@ -31,18 +30,18 @@ namespace WebApiModulo4
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<MiFiltroDeAccion>();
-            services.AddResponseCaching();
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer();
-            services.AddTransient<ClaseB>();
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("defaultConnection")));
-            services.AddMvc(options =>
+
+            services.AddAutoMapper(options =>
             {
-                options.Filters.Add(new MiFiltroDeExcepcion());
-                // Si hubiese Inyección de dependencias en el filtro
-                //options.Filters.Add(typeof(MiFiltroDeExcepcion)); 
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+                options.CreateMap<AutorCreacionDTO, Autor>();
+            });
+
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("defaultConnection")));
+            services.AddMvc()
+                .AddNewtonsoftJson(options =>
+                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+                
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,9 +58,13 @@ namespace WebApiModulo4
             }
 
             app.UseHttpsRedirection();
-            app.UseResponseCaching();
-            app.UseAuthentication();
-            app.UseMvc();
+
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,13 +9,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using WebApiModulo5.Contexts;
-using WebApiModulo5.Entities;
-using WebApiModulo5.Models;
+using WebApiModulo4.Contexts;
+using WebApiModulo4.Controllers;
+using WebApiModulo4.Helpers;
+using WebApiModulo4.Services;
 
-namespace WebApiModulo5
+namespace WebApiModulo4
 {
     public class Startup
     {
@@ -30,19 +31,20 @@ namespace WebApiModulo5
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            services.AddAutoMapper(options =>
-            {
-                options.CreateMap<AutorCreacionDTO, Autor>();
-            });
-
+            services.AddScoped<MiFiltroDeAccion>();
+            services.AddResponseCaching();
+            services.AddTransient<ClaseB>();
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("defaultConnection")));
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-                .AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            services.AddControllers(options =>
+            {
+                options.Filters.Add(new MiFiltroDeExcepcion());
+                // Si hubiese Inyección de dependencias en el filtro
+                //options.Filters.Add(typeof(MiFiltroDeExcepcion)); 
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -55,7 +57,13 @@ namespace WebApiModulo5
             }
 
             app.UseHttpsRedirection();
-            app.UseMvc();
+            app.UseRouting();
+            app.UseResponseCaching();
+            app.UseAuthentication();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 }
