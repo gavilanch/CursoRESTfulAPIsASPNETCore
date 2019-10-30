@@ -1,4 +1,4 @@
-# Repositorio del curso: Construyendo Web APIs con ASP.NET Core 2.2
+# Repositorio del curso: Construyendo Web APIs con ASP.NET Core 2.2 y 3
 
 Link del curso: https://www.udemy.com/construyendo-web-apis-restful-con-aspnet-core/?couponCode=GITHUB
 
