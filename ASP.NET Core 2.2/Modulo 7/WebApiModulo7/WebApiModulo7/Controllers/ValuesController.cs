@@ -14,7 +14,7 @@ namespace WebApiModulo7.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
     public class ValuesController : ControllerBase
     {
         private readonly IDataProtector _protector;
