@@ -54,56 +54,52 @@ namespace WebApiModulo8
             }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                 .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
-            services
-    .AddSingleton<IActionContextAccessor, ActionContextAccessor>()
-    .AddScoped<IUrlHelper>(x => x
-        .GetRequiredService<IUrlHelperFactory>()
-        .GetUrlHelper(x.GetRequiredService<IActionContextAccessor>().ActionContext));
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
             services.AddScoped<HATEOASAuthorFilterAttribute>();
             services.AddScoped<HATEOASAuthorsFilterAttribute>();
             services.AddScoped<GeneradorEnlaces>();
 
-            services.AddSwaggerGen(config =>
-            {
-                config.SwaggerDoc("v1", new Info
-                {
-                    Version = "V1",
-                    Title = "Mi Web API",
-                    Description = "Esta es una descripción del Web API",
-                    TermsOfService = "https://www.udemy.com/user/felipegaviln/",
-                    License = new License()
-                    {
-                        Name = "MIT",
-                        Url = "http://bfy.tw/4nqh"
-                    },
-                    Contact = new Contact()
-                    {
-                        Name = "Felipe Gavilán",
-                        Email = "felipe_gavilan887@hotmail.com",
-                        Url = "https://gavilan.blog/"
-                    }
-                });
+            //services.AddSwaggerGen(config =>
+            //{
+            //    config.SwaggerDoc("v1", new Info
+            //    {
+            //        Version = "V1",
+            //        Title = "Mi Web API",
+            //        Description = "Esta es una descripción del Web API",
+            //        TermsOfService = "https://www.udemy.com/user/felipegaviln/",
+            //        License = new License()
+            //        {
+            //            Name = "MIT",
+            //            Url = "http://bfy.tw/4nqh"
+            //        },
+            //        Contact = new Contact()
+            //        {
+            //            Name = "Felipe Gavilán",
+            //            Email = "felipe_gavilan887@hotmail.com",
+            //            Url = "https://gavilan.blog/"
+            //        }
+            //    });
 
-                config.SwaggerDoc("v2", new Info { Title = "Mi Web API", Version = "v2" });
+            //    config.SwaggerDoc("v2", new Info { Title = "Mi Web API", Version = "v2" });
 
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                config.IncludeXmlComments(xmlPath);
+                //var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                //var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                //config.IncludeXmlComments(xmlPath);
 
-            });
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseSwagger();
+            //app.UseSwagger();
 
-            app.UseSwaggerUI(config =>
-            {
-                config.SwaggerEndpoint("/swagger/v1/swagger.json", "Mi API V1");
-                config.SwaggerEndpoint("/swagger/v2/swagger.json", "Mi API V2");
-            });
+            //app.UseSwaggerUI(config =>
+            //{
+            //    config.SwaggerEndpoint("/swagger/v1/swagger.json", "Mi API V1");
+            //    config.SwaggerEndpoint("/swagger/v2/swagger.json", "Mi API V2");
+            //});
 
             if (env.IsDevelopment())
             {

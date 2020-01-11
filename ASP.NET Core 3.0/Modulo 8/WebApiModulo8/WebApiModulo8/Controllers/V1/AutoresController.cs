@@ -20,13 +20,11 @@ namespace WebApiModulo8.Controllers.V1
     {
         private readonly ApplicationDbContext context;
         private readonly IMapper mapper;
-        private readonly IUrlHelper urlHelper;
 
-        public AutoresController(ApplicationDbContext context, IMapper mapper, IUrlHelper urlHelper)
+        public AutoresController(ApplicationDbContext context, IMapper mapper)
         {
             this.context = context;
             this.mapper = mapper;
-            this.urlHelper = urlHelper;
         }
 
         // GET api/autores
@@ -70,9 +68,9 @@ namespace WebApiModulo8.Controllers.V1
 
         private void GenerarEnlaces(AutorDTO autor)
         {
-            autor.Enlaces.Add(new Enlace(urlHelper.Link("ObtenerAutor", new { id = autor.Id }), rel: "self", metodo: "GET"));
-            autor.Enlaces.Add(new Enlace(urlHelper.Link("ActualizarAutor", new { id = autor.Id }), rel: "update-author", metodo: "PUT"));
-            autor.Enlaces.Add(new Enlace(urlHelper.Link("BorrarAutor", new { id = autor.Id }), rel: "delete-author", metodo: "DELETE"));
+            autor.Enlaces.Add(new Enlace(Url.Link("ObtenerAutor", new { id = autor.Id }), rel: "self", metodo: "GET"));
+            autor.Enlaces.Add(new Enlace(Url.Link("ActualizarAutor", new { id = autor.Id }), rel: "update-author", metodo: "PUT"));
+            autor.Enlaces.Add(new Enlace(Url.Link("BorrarAutor", new { id = autor.Id }), rel: "delete-author", metodo: "DELETE"));
         }
 
         // POST api/autores
