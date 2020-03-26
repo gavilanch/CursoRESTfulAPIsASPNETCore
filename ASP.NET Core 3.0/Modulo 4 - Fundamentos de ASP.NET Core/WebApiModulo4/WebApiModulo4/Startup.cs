@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -41,6 +42,9 @@ namespace WebApiModulo4
                 // Si hubiese Inyección de dependencias en el filtro
                 //options.Filters.Add(typeof(MiFiltroDeExcepcion)); 
             });
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,13 +61,15 @@ namespace WebApiModulo4
             }
 
             app.UseHttpsRedirection();
-            app.UseRouting();
-            app.UseResponseCaching();
-            app.UseAuthentication();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+app.UseRouting();
+app.UseResponseCaching();
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
         }
     }
 }
