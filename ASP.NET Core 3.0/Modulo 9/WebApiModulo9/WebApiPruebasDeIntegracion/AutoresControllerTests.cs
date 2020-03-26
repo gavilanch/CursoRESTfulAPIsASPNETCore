@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,7 +12,6 @@ using System.Threading.Tasks;
 using WebApiModulo9;
 using WebApiModulo9.Entities;
 using WebApiModulo9.Services;
-using WebApiPruebasDeIntegracion.Filters;
 using WebApiPruebasDeIntegracion.Mocks;
 
 namespace WebApiPruebasDeIntegracion
@@ -33,13 +33,13 @@ namespace WebApiPruebasDeIntegracion
             {
                 builder.ConfigureTestServices(services =>
                 {
-                    services.AddMvc(options =>
-                    {
-                        options.Filters.Add(new AllowAnonymousFilter());
-                        options.Filters.Add(new FakeUserFilter());
-                    });
-
                     services.AddScoped<IRepositorioAutores, RepositorioAutoresMock>();
+                    services.AddSingleton<IAuthorizationHandler, SaltarseRequerimientosHandle>();
+
+                    services.AddControllers(options =>
+                    {
+                        options.Filters.Add(new UsuarioFalsoFilter());
+                    });
                 });
             });
         }
