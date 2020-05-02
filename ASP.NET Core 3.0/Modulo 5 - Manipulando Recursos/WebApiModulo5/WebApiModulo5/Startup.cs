@@ -36,7 +36,7 @@ namespace WebApiModulo5
             services.AddAutoMapper(configuration =>
             {
                 configuration.CreateMap<Autor, AutorDTO>();
-                configuration.CreateMap<AutorCreacionDTO, Autor>();
+                configuration.CreateMap<AutorCreacionDTO, Autor>().ReverseMap();
             }, typeof(Startup));
 
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("defaultConnection")));
