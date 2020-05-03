@@ -91,14 +91,14 @@ namespace WebApiModulo5.Controllers
 
             patchDocument.ApplyTo(autorDTO, ModelState);
 
+            mapper.Map(autorDTO, autorDeLaDB);
+
             var isValid = TryValidateModel(autorDeLaDB);
 
             if (!isValid)
             {
                 return BadRequest(ModelState);
             }
-
-            mapper.Map(autorDTO, autorDeLaDB);
 
             await context.SaveChangesAsync();
 
