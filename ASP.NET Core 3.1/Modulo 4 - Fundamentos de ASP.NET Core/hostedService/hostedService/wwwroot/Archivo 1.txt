@@ -1,0 +1,14 @@
+WriteToFileHostedService: Proceso iniciado 01/05/2020 11:50:40
+WriteToFileHostedService: Hacer una operación 01/05/2020 11:50:40
+WriteToFileHostedService: Hacer una operación 01/05/2020 11:50:45
+WriteToFileHostedService: Hacer una operación 01/05/2020 11:50:50
+WriteToFileHostedService: Hacer una operación 01/05/2020 11:50:55
+WriteToFileHostedService: Hacer una operación 01/05/2020 11:51:00
+WriteToFileHostedService: Hacer una operación 01/05/2020 11:51:05
+WriteToFileHostedService: Hacer una operación 01/05/2020 11:51:10
+WriteToFileHostedService: Hacer una operación 01/05/2020 11:51:15
+WriteToFileHostedService: Hacer una operación 01/05/2020 11:51:20
+WriteToFileHostedService: Hacer una operación 01/05/2020 11:51:25
+WriteToFileHostedService: Hacer una operación 01/05/2020 11:51:30
+WriteToFileHostedService: Hacer una operación 01/05/2020 11:51:35
+WriteToFileHostedService: Proceso detenido 01/05/2020 11:51:37
