@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace PeliculasAPI.DTOs
 {
-    public class ActorCreacionDTO: ActorPatchDTO
+    public class PeliculaCreacionDTO: PeliculaPatchDTO
     {
         [PesoArchivoValidacion(PesoMaximoEnMegaBytes: 4)]
-        [TipoArchivoValidacion(grupoTipoArchivo: GrupoTipoArchivo.Imagen)]
-        public IFormFile Foto { get; set; }
+        [TipoArchivoValidacion(GrupoTipoArchivo.Imagen)]
+        public IFormFile Poster { get; set; }
     }
 }
