@@ -7,6 +7,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20200522004758_Actores.cs" />
     <Compile Remove="Migrations\20200522004758_Actores.Designer.cs" />
+    <Compile Remove="Migrations\20200607201431_DataPrueba.cs" />
+    <Compile Remove="Migrations\20200607201431_DataPrueba.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,6 +21,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.1.2" />
   </ItemGroup>
 
   <ItemGroup>
