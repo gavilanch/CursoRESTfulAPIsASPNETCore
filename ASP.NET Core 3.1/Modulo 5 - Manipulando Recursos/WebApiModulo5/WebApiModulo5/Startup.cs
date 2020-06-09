@@ -36,6 +36,7 @@ namespace WebApiModulo5
             services.AddAutoMapper(configuration =>
             {
                 configuration.CreateMap<Autor, AutorDTO>();
+                configuration.CreateMap<Libro, LibroDTO>();
                 configuration.CreateMap<AutorCreacionDTO, Autor>().ReverseMap();
             }, typeof(Startup));
 
