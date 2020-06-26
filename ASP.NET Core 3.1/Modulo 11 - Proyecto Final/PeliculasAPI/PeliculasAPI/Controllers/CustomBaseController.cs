@@ -78,5 +78,53 @@ namespace PeliculasAPI.Controllers
             await context.SaveChangesAsync();
             return NoContent();
         }
+
+        protected async Task<ActionResult> Delete<TEntidad>(int id) where TEntidad : class, IId, new()
+        {
+            var existe = await context.Set<TEntidad>().AnyAsync(x => x.Id == id);
+            if (!existe)
+            {
+                return NotFound();
+            }
+
+            context.Remove(new TEntidad() { Id = id });
+            await context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        protected async Task<ActionResult> Patch<TEntidad, TDTO>(int id, JsonPatchDocument<TDTO> patchDocument) 
+            where TDTO : class
+            where TEntidad : class, IId
+        {
+            if (patchDocument == null)
+            {
+                return BadRequest();
+            }
+
+            var entidadDB = await context.Set<TEntidad>().FirstOrDefaultAsync(x => x.Id == id);
+
+            if (entidadDB == null)
+            {
+                return NotFound();
+            }
+
+            var dto = mapper.Map<TDTO>(entidadDB);
+
+            patchDocument.ApplyTo(dto, ModelState);
+
+            var isValid = TryValidateModel(dto);
+
+            if (!isValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            mapper.Map(dto, entidadDB);
+
+            await context.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 }
