@@ -1,0 +1,43 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- main
+
+pool:
+  vmImage: 'vs2017-win2016'
+
+variables:
+  buildConfiguration: 'Release'
+  proyecto: 'WebAPIAutores/WebAPIAutores.csproj'
+
+steps:
+- task: UseDotNet@2
+  displayName: 'Instalando Preview ASP.NET Core 6'
+  inputs:
+    packageType: 'sdk'
+    version: '6.0.100-preview.4.21255.9'
+    includePreviewVersions: true
+- script: dotnet build --configuration $(buildConfiguration)
+  displayName: 'dotnet build $(buildConfiguration)'
+- task: CmdLine@2
+  displayName: 'Installing EF Core CLI'
+  inputs:
+    script: 'dotnet tool install --global dotnet-ef'
+- task: CmdLine@2
+  displayName: 'Generating DB script'
+  inputs:
+    script: 'dotnet ef migrations script -i -o $(Build.ArtifactStagingDirectory)\migrate.sql --project $(proyecto)'
+- task: DotNetCoreCLI@2
+  displayName: 'Publishing App...'
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: $(proyecto)
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory) --runtime win-x64 --self-contained'
+    zipAfterPublish: false
+    modifyOutputPath: false
+- task: PublishBuildArtifacts@1
+  displayName: 'Publicando los artefactos'
