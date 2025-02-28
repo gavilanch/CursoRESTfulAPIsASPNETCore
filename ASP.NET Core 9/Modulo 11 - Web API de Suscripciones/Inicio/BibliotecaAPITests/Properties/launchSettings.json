@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "BibliotecaAPITests": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:51500;http://localhost:51501"
+    }
+  }
+}
