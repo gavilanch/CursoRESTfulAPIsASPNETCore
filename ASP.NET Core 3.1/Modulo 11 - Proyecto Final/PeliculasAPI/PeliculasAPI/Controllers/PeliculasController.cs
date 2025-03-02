@@ -208,7 +208,19 @@ namespace PeliculasAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            return await Delete<Pelicula>(id);
+            var existe = await context.Peliculas.AnyAsync(x => x.Id == id);
+            if (!existe)
+            {
+                return NotFound();
+            }
+
+            string rutaFoto = await context.Peliculas.Where(a => a.Id == id).Select(a => a.Poster).FirstOrDefaultAsync();
+            await almacenadorArchivos.BorrarArchivo(rutaFoto, contenedor);
+
+            context.Remove(new Pelicula() { Id = id });
+            await context.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }
