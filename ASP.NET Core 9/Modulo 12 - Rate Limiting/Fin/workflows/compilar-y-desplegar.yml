@@ -1,0 +1,65 @@
+name: Compilar y desplegar
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'BibliotecaAPI/**'
+      - 'BibliotecaAPITests/**'
+      - '.github/workflows/compilar-y-desplegar.yml'
+
+env:
+  VERSION_DOTNET: '9'
+  AZURE_APP_SERVICE_NOMBRE: nombre-del-app-service
+  AZURE_APP_SERVICE_UBICACION_PAQUETE: '.'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      proyecto: BibliotecaAPI/BibliotecaAPI.csproj
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.2.2
+
+      - name: Instalar .NET
+        uses: actions/setup-dotnet@v4.3.0
+        with:
+          dotnet-version: ${{ env.VERSION_DOTNET }}
+
+      - name: Obteniendo las dependencias
+        run: dotnet restore
+
+      - name: Compilar
+        run: dotnet build --no-restore
+
+      - name: Realizar pruebas
+        run: dotnet test --no-build
+
+      - name: Publicar el Web API
+        run: dotnet publish $proyecto -c Release -o miapp --runtime win-x86
+
+      - name: Cargar Artefacto
+        uses: actions/upload-artifact@v4.6.0
+        with:
+          path: ./miapp
+          name: build
+  despliegue:
+    permissions:
+      contents: none
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Obtener los artefactos
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: build
+
+      - name: Despliegue al Azure App Service
+        uses: Azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.AZURE_APP_SERVICE_NOMBRE }}
+          publish-profile: ${{ secrets.AZURE_PERFIL_PUBLICO }}
+          package: ${{ env.AZURE_APP_SERVICE_UBICACION_PAQUETE }}  
